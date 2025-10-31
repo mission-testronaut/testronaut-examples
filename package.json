@@ -1,0 +1,31 @@
+{
+  "name": "testronaut-examples",
+  "version": "1.0.0",
+  "description": "a set of example missions for testing demo.testronaut.app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "npx testronaut"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mission-testronaut/testronaut-examples.git"
+  },
+  "keywords": [
+    "testing",
+    "ai",
+    "automation"
+  ],
+  "author": "Shane Fast",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mission-testronaut/testronaut-examples/issues"
+  },
+  "homepage": "https://github.com/mission-testronaut/testronaut-examples#readme",
+  "dependencies": {
+    "testronaut": "^1.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  }
+}

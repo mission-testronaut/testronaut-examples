@@ -1,0 +1,8 @@
+{
+  "provider": "openai",
+  "model": "gpt-5",
+  "initialized": true,
+  "outputDir": "missions/mission_reports",
+  "projectName": "testronaut-examples",
+  "maxTurns": 20
+}
