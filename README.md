@@ -27,6 +27,7 @@ Each mission demonstrates how autonomous testing agents powered by GPT‑5 can r
 
 ```bash
 npm install -g testronaut
+npx testronaut --init
 ```
 
 2. **Clone this repo**
@@ -42,18 +43,24 @@ cd testronaut-crew-simulation-missions
 export URL="https://demo.testronaut.app"
 export USERNAME="Nova"
 export PASSWORD="1234"
+
+# For OpenAI
+export OPENAI_API_KEY=sk-...
+
+# Or for Gemini
+export GEMINI_API_KEY=AIza...
 ```
 
 4. **Run a mission**
 
 ```bash
-testronaut run missions/login.mission.js
+npx testronaut login.mission.js
 ```
 
 5. **Run the full suite**
 
 ```bash
-testronaut run missions/smokeSuite.mission.js
+npx testronaut
 ```
 
 ---
