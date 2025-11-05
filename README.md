@@ -2,7 +2,7 @@
 
 This repository contains a collection of **example missions** for [Testronaut](https://testronaut.app), designed to run against the demo sandbox at [https://demo.testronaut.app](https://demo.testronaut.app).
 
-Each mission demonstrates how autonomous testing agents powered by GPT‑5 can reason, interact, and validate UI workflows in a real browser.
+Each mission demonstrates how autonomous testing agents can reason, interact, and validate UI workflows in a real browser.
 
 ---
 
