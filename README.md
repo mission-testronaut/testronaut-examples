@@ -103,7 +103,7 @@ README.md
 
 ## 🌌 Credits
 
-Built by **Sandevistan Tech Inc.** as part of the [Testronaut](https://testronaut.app) ecosystem — a framework for autonomous QA agents and end‑to‑end testing powered by GPT‑5.
+Built by **Sandevistan Tech Inc.** as part of the [Testronaut](https://testronaut.app) ecosystem, a framework for autonomous QA agents and end‑to‑end testing.
 
 ---
 
