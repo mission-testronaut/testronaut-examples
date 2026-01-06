@@ -16,6 +16,7 @@ Each mission demonstrates how autonomous testing agents can reason, interact, an
 | `removeTask.mission.js` | Removes a completed or queued task |
 | `reportSaboteur.mission.js` | Files a report to identify the Saboteur |
 | `completeAllTasks.mission.js` | Completes every task sequentially |
+| `fileTransfer.mission.js` | Downloads the sus briefing file and uploads a crewmate alibi log |
 | `logout.mission.js` | Logs the user out and returns to the login screen |
 | `smokeSuite.mission.js` | Runs a full workflow suite (login → task → report → logout) |
 
