@@ -8,8 +8,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-models:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: test-gpt-5.0
+            command: npx testronaut login.mission.js
+          - name: test-gpt-5.1
+            command: npx testronaut login.mission.js --model gpt-5.1
+          - name: test-gpt-5-mini
+            command: npx testronaut login.mission.js --model gpt-5-mini
+          - name: test-gpt-5-nano
+            command: npx testronaut login.mission.js --model gpt-5-nano
+          - name: test-gpt-4.1
+            command: npx testronaut login.mission.js --model gpt-4.1
+          - name: test-gpt-4.1-mini
+            command: npx testronaut login.mission.js --model gpt-4.1-mini
 
     steps:
       - name: Checkout repository
@@ -54,77 +70,7 @@ jobs:
           URL: ${{ secrets.URL }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-        run: npx testronaut login.mission.js
-
-      # Login and upload steps to send reports to mission control
-    #   - name: Login to Testronaut
-    #     run: npx testronaut login --apiKey=${{ secrets.TESTRONAUT_API_KEY }}
-
-    #   - name: Upload Testronaut report
-    #     run: npx testronaut upload
-
-      # Optional Steps for preserving report artifacts
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: testronaut-reports
-          path: missions/mission_reports/**
-
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: testronaut-screenshots
-          path: missions/mission_reports/screenshots/*.png
-
-  test-gpt5_1:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm' 
-
-      - name: Install dependencies
-        run: npm ci
-
-      # Compute the Playwright version from your installed dependency
-      - name: Get Playwright version
-        id: pw
-        run: |
-          version=$(node -p 'require("playwright/package.json").version')
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      # Cache the Playwright browsers folder
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ steps.pw.outputs.version }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      # Install system deps + ensure browsers present (will be a no-op if cache hit)
-      - name: Install Playwright browsers (with OS deps)
-        run: npx playwright install --with-deps
-
-      # Optional but often stabilizes CI chromium on GH runners
-      - name: Set CI flags for Chromium
-        run: echo "TESTRONAUT_CI_CHROMIUM=1" >> $GITHUB_ENV
-
-      - name: Run Testronaut missions (openAI Example)
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          URL: ${{ secrets.URL }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PASSWORD: ${{ secrets.PASSWORD }}
-        run: npx testronaut login.mission.js --model gpt-5.1
+        run: ${{ matrix.command }}
 
       # Login and upload steps to send reports to mission control
     #   - name: Login to Testronaut
