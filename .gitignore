@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # Testronaut
 mission_reports/
+
+#VS Code
+.vscode/
