@@ -54,7 +54,7 @@ jobs:
           URL: ${{ secrets.URL }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-        run: npx testronaut
+        run: npx testronaut login.mission.js
 
       # Login and upload steps to send reports to mission control
     #   - name: Login to Testronaut
