@@ -73,11 +73,11 @@ jobs:
         run: ${{ matrix.command }}
 
       # Login and upload steps to send reports to mission control
-    #   - name: Login to Testronaut
-    #     run: npx testronaut login --apiKey=${{ secrets.TESTRONAUT_API_KEY }}
+      - name: Login to Testronaut
+        run: npx testronaut login --apiKey=${{ secrets.TESTRONAUT_API_KEY }}
 
-    #   - name: Upload Testronaut report
-    #     run: npx testronaut upload
+      - name: Upload Testronaut report
+        run: npx testronaut upload
 
       # Optional Steps for preserving report artifacts
       - name: Upload reports
