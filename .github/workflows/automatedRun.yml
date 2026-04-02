@@ -84,12 +84,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: testronaut-reports
+          name: testronaut-reports-${{ matrix.name }}
           path: missions/mission_reports/**
 
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: testronaut-screenshots
+          name: testronaut-screenshots-${{ matrix.name }}
           path: missions/mission_reports/screenshots/*.png
