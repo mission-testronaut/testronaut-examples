@@ -14,6 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # OpenAI Models
           - name: test-gpt-5.0
             command: npx testronaut login.mission.js
           - name: test-gpt-5.1
@@ -26,6 +27,15 @@ jobs:
             command: npx testronaut login.mission.js --model gpt-4.1
           - name: test-gpt-4.1-mini
             command: npx testronaut login.mission.js --model gpt-4.1-mini
+          # Gemini Models
+          - name: test-gemini-2.5-flash
+            command: npx testronaut login.mission.js --model gemini-2.5-flash
+          - name: test-gemini-2.5-pro
+            command: npx testronaut login.mission.js --model gemini-2.5-pro
+          - name: test-gemini-2.5-flash-lite
+            command: npx testronaut login.mission.js --model gemini-2.5-flash-lite
+          - name: test-gemini-3.1-pro-preview
+            command: npx testronaut login.mission.js --model gemini-3.1-pro-preview
 
     steps:
       - name: Checkout repository
@@ -64,9 +74,10 @@ jobs:
       - name: Set CI flags for Chromium
         run: echo "TESTRONAUT_CI_CHROMIUM=1" >> $GITHUB_ENV
 
-      - name: Run Testronaut missions (openAI Example)
+      - name: Run Testronaut missions (openAI + Gemini Example)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           URL: ${{ secrets.URL }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
