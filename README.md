@@ -66,6 +66,55 @@ npx testronaut
 
 ---
 
+## 📊 Benchmark Agent UI Modes
+
+You can compare regular, agent-friendly, and agent-hostile UI modes with repeated runs of the same mission. The benchmark runner randomizes mode order by default, executes each condition the requested number of times, parses Testronaut's JSON reports, and writes a CSV, JSON, and Markdown summary.
+
+Run a small pilot:
+
+```bash
+npm run benchmark:agent-modes -- --trials 5 --mission missions/login.mission.js
+```
+
+Run a larger comparison:
+
+```bash
+npm run benchmark:agent-modes -- --trials 30 --mission missions/login.mission.js
+```
+
+Preview the planned run order without calling Testronaut:
+
+```bash
+npm run benchmark:agent-modes -- --trials 3 --dry-run
+```
+
+By default the runner derives the base app URL from `URL` in `.env` or the current environment, then tests:
+
+```text
+regular:  <base URL>
+friendly: <base URL>?agentMode=true
+hostile:  <base URL>?agentHostile=true
+```
+
+Outputs are written under `benchmarks/agent-mode-runs/<timestamp>/`:
+
+- `plan.json` records the randomized run order and configuration.
+- `results.csv` contains one row per run.
+- `results.json` contains the parsed metrics.
+- `report.md` summarizes success rate, duration, tokens, turns, and retries by mode.
+
+Useful options:
+
+```bash
+npm run benchmark:agent-modes -- --trials 10 --base-url http://localhost:5173/
+npm run benchmark:agent-modes -- --modes regular,friendly --trials 20
+npm run benchmark:agent-modes -- --sequential --trials 5
+```
+
+For the cleanest comparison, keep the mission file, model, credentials, browser environment, app version, and `maxTurns` fixed across all modes.
+
+---
+
 ## 🧠 Example Mission
 
 ```js
