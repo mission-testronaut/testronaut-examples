@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npx testronaut",
+    "test": "testronaut",
     "benchmark:agent-modes": "node scripts/benchmark-agent-modes.mjs"
   },
   "repository": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/mission-testronaut/testronaut-examples#readme",
   "devDependencies": {
-    "@playwright/test": "^1.58.2"
+    "@playwright/test": "^1.60.0"
   },
   "dependencies": {
     "testronaut": "file:../testronaut-cli"
