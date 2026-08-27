@@ -28,7 +28,7 @@ Each mission demonstrates how autonomous testing agents can reason, interact, an
 
 ```bash
 npm install -g testronaut
-npx testronaut --init
+testronaut --init
 ```
 
 2. **Clone this repo**
@@ -55,13 +55,13 @@ export GEMINI_API_KEY=AIza...
 4. **Run a mission**
 
 ```bash
-npx testronaut login.mission.js
+testronaut login.mission.js
 ```
 
 5. **Run the full suite**
 
 ```bash
-npx testronaut
+testronaut
 ```
 
 ---
