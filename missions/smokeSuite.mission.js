@@ -5,6 +5,8 @@ import { startTaskMission } from './startTask.mission.js';
 import { reportSaboteurMission } from './reportSaboteur.mission.js';
 import { logoutMission } from './logout.mission.js';
 
+export const tags = ['smoke', 'navigation'];
+
 export const smokeSuiteMission =
   `Run a lightweight journey: add a task, start a task, optionally file a report, then logout.
    Take screenshots at notable transitions. 
@@ -14,6 +16,7 @@ export async function executeMission() {
   return await runMissions({
     preMission: [loginMission, addTaskMission, startTaskMission],
     mission: reportSaboteurMission,
+    tags,
     postMission: logoutMission
   }, "smoke suite mission");
 }
