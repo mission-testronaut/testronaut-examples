@@ -1,5 +1,7 @@
 import { runMissions } from 'testronaut';
 
+export const tags = ['authentication', 'smoke'];
+
 export const loginMission =
   `Visit ${process.env.URL}.
    Fill the username field (#username) with ${process.env.USERNAME}.
@@ -14,5 +16,5 @@ export const loginMission =
    Otherwise, report FAILURE with the reason.`;
 
 export async function executeMission() {
-  return await runMissions({ mission: loginMission }, "login mission");
+  return await runMissions({ mission: loginMission, tags }, "login mission");
 }

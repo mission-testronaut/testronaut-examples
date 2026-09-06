@@ -3,6 +3,12 @@
   "model": "gpt-5.6",
   "initialized": true,
   "outputDir": "missions/mission_reports",
+  "tags": [
+    "authentication",
+    "smoke"
+  ],
+  "tagMatch": "any",
+  "addTags": [],
   "projectName": "testronaut-examples",
   "maxTurns": 20
 }
