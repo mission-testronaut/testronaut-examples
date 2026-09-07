@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "a set of example missions for testing demo.testronaut.app",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "testronaut",
     "benchmark:agent-modes": "node scripts/benchmark-agent-modes.mjs"

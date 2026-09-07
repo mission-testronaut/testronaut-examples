@@ -10,5 +10,6 @@
   "tagMatch": "any",
   "addTags": [],
   "projectName": "testronaut-examples",
-  "maxTurns": 20
+  "maxTurns": 20,
+  "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBbFhVZGdtdHVNU2pxYmt2ZW56V3dJaVZUemkxIiwiYXBpS2V5IjoiMjNkY2M4YzNkNTc2M2RjYTkyN2ZkNmU2M2ZiYmFhZWFjYmYzN2UzZmVhMGIyMjY2YjllNWYxZmRkYzMwZTlkYiIsImlhdCI6MTc4ODc0ODIzNiwiZXhwIjoxNzg4NzUxODM2fQ.cGRfPPAG5fEaQyvB8ekdrkMTXKJ4rQcwmzK8l_4apuA"
 }
