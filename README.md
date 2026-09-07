@@ -19,6 +19,9 @@ Each mission demonstrates how autonomous testing agents can reason, interact, an
 | `fileTransfer.mission.js` | Downloads the sus briefing file and uploads a crewmate alibi log |
 | `logout.mission.js` | Logs the user out and returns to the login screen |
 | `smokeSuite.mission.js` | Runs a full workflow suite (login → task → report → logout) |
+| `typescript/login.mission.ts` | TypeScript equivalent of the login mission |
+| `typescript/addTask.mission.ts` | TypeScript mission with a relative `.ts` import |
+| `typescript/smokeSuite.mission.ts` | Composes multiple typed mission goals |
 
 ---
 
@@ -63,6 +66,21 @@ testronaut login.mission.js
 ```bash
 testronaut
 ```
+
+### TypeScript missions
+
+TypeScript missions use the same `import`/`export` structure as JavaScript missions.
+They do not require a build step, a `tsconfig.json`, or `"type": "module"` in this
+project's `package.json`:
+
+```bash
+testronaut missions/typescript/login.mission.ts
+testronaut missions/typescript/addTask.mission.ts
+testronaut missions/typescript/smokeSuite.mission.ts
+```
+
+The TypeScript examples live in a subdirectory so the default non-recursive run
+does not execute both the JavaScript originals and their TypeScript equivalents.
 
 ---
 
@@ -153,6 +171,10 @@ missions/
   reportSaboteur.mission.js
   smokeSuite.mission.js
   startTask.mission.js
+  typescript/
+    addTask.mission.ts
+    login.mission.ts
+    smokeSuite.mission.ts
 README.md
 ```
 
