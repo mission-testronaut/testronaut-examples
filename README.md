@@ -53,6 +53,9 @@ export OPENAI_API_KEY=sk-...
 
 # Or for Gemini
 export GEMINI_API_KEY=AIza...
+
+# Or for Anthropic Claude
+export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 4. **Run a mission**
