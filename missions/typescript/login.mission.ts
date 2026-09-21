@@ -1,8 +1,9 @@
 import { runMissions } from 'testronaut';
+import { applyMissionPolicies } from '../policies.js';
 
 export const tags: string[] = ['authentication', 'smoke', 'typescript'];
 
-export const loginMission: string =
+export const loginMission: string = applyMissionPolicies(
   `Visit ${process.env.URL}.
    Fill the username field (#username) with ${process.env.USERNAME}.
    Fill the access code field (#access) with ${process.env.PASSWORD}.
@@ -13,7 +14,8 @@ export const loginMission: string =
      • Wait until a heading with "Mission Tasks" is visible.
    Take a screenshot.
    If the Mission Tasks section is visible, report SUCCESS with the reason.
-   Otherwise, report FAILURE with the reason.`;
+   Otherwise, report FAILURE with the reason.`
+);
 
 export async function executeMission() {
   return runMissions({ mission: loginMission, tags }, 'TypeScript login mission');

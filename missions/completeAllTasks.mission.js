@@ -1,7 +1,8 @@
 import { runMissions } from 'testronaut';
 import { loginMission } from './login.mission.js';
+import { applyMissionPolicies } from './policies.js';
 
-export const completeAllTasksMission =
+export const completeAllTasksMission = applyMissionPolicies(
   `Goal: sequentially complete all tasks until the victory screen appears.
    Rules:
      • Only one task can run at a time. If a task is "En route" or "In progress", wait for it to finish ("Done") before starting another.
@@ -12,7 +13,8 @@ export const completeAllTasksMission =
    When all tasks are done, the app should show the end screen with title "Crew Victory!".
    Take a screenshot at least once during the process and once on the final screen.
    If you reach "Crew Victory!", report SUCCESS.
-   Otherwise, report FAILURE and explain which step failed.`;
+   Otherwise, report FAILURE and explain which step failed.`
+);
 
 export async function executeMission() {
   return await runMissions({
