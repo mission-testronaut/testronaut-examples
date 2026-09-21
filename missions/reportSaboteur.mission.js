@@ -1,7 +1,8 @@
 import { runMissions } from 'testronaut';
 import { loginMission } from './login.mission.js';
+import { applyMissionPolicies } from './policies.js';
 
-export const reportSaboteurMission =
+export const reportSaboteurMission = applyMissionPolicies(
   `Open the report flow by clicking a button labeled "Report".
    A modal should appear titled "File a Report".
    In the modal, select any crew member by clicking a radio input next to their name.
@@ -12,7 +13,8 @@ export const reportSaboteurMission =
      • OR if the page transitions to a victory screen with text "Crew Victory!", that also counts as success.
    Take a screenshot.
    If either success condition is met, report SUCCESS with what you observed.
-   Otherwise, report FAILURE explaining what happened.`;
+   Otherwise, report FAILURE explaining what happened.`
+);
 
 export async function executeMission() {
   return await runMissions({

@@ -1,8 +1,9 @@
 import { runMissions } from 'testronaut';
 import { loginMission } from './login.mission.js';
 import { logoutMission } from './logout.mission.js';
+import { applyMissionPolicies } from './policies.js';
 
-export const fileTransferMission =
+export const fileTransferMission = applyMissionPolicies(
   `We are on the dashboard in the "Data Drop Bay" section.
    First, download the sus briefing:
      • Click the button with id #download-briefing.
@@ -13,7 +14,8 @@ export const fileTransferMission =
      • Wait for #upload-status to mention crewmate-alibi.txt and show the sus verdict.
      • Take a screenshot after the upload status updates.
    If both the download and upload statuses reflect success, report SUCCESS with what was seen.
-   Otherwise, report FAILURE with any missing status or error.`;
+   Otherwise, report FAILURE with any missing status or error.`
+);
 
 export async function executeMission() {
   return await runMissions({

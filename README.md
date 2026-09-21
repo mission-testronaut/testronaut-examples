@@ -20,6 +20,7 @@ Each mission demonstrates how autonomous testing agents can reason, interact, an
 | `fileTransfer.mission.js` | Downloads the sus briefing file and uploads a crewmate alibi log |
 | `logout.mission.js` | Logs the user out and returns to the login screen |
 | `smokeSuite.mission.js` | Runs a full workflow suite (login → task → report → logout) |
+| `policies.js` | Applies shared screenshot and post-run feedback policies to every mission |
 | `typescript/login.mission.ts` | TypeScript equivalent of the login mission |
 | `typescript/addTask.mission.ts` | TypeScript mission with a relative `.ts` import |
 | `typescript/smokeSuite.mission.ts` | Composes multiple typed mission goals |
@@ -38,8 +39,8 @@ testronaut --init
 2. **Clone this repo**
 
 ```bash
-git clone https://github.com/your-org/testronaut-crew-simulation-missions.git
-cd testronaut-crew-simulation-missions
+git clone https://github.com/mission-testronaut/testronaut-examples.git
+cd testronaut-examples
 ```
 
 3. **Set your environment variables** (used by missions)
@@ -110,6 +111,47 @@ does not execute both the JavaScript originals and their TypeScript equivalents.
 
 ---
 
+## 🔭 Beyond Pass or Fail
+
+A mission run can provide more than a binary result. The shared
+[`missions/policies.js`](missions/policies.js) file asks the agent to preserve
+the explicit `SUCCESS` or `FAILURE` outcome while also reporting a small number
+of evidence-backed observations from the journey.
+
+The feedback policy considers six lenses:
+
+| Lens | Example signals |
+|------|-----------------|
+| Test quality | Ambiguity, weak assertions, missing assumptions, or redundant steps |
+| UI / UX | Confusing labels, unclear feedback, accessibility concerns, or friction |
+| Security | Unexpected access or sensitive exposure that should be validated |
+| Latency | Slow responses or transitions that affected the journey |
+| Surprises | Unanticipated states, alternate paths, or intermittent behaviour |
+| Token efficiency | Retries, repeated inspection, or avoidable context and tool calls |
+
+Apply the policies when defining a mission:
+
+```js
+import { applyMissionPolicies } from './policies.js';
+
+export const exampleMission = applyMissionPolicies(`
+  Visit the dashboard and complete the expected journey.
+  Report SUCCESS or FAILURE with evidence.
+`);
+```
+
+The review is capped at three findings and may report `No additional findings.`
+This keeps reflection bounded instead of paying for an open-ended critique after
+every run. The observations are leads for human review, not automatically
+confirmed UX, security, or performance defects. Recommended mission changes
+should be versioned and measured before they are retained.
+
+Because composed suites reuse the exported mission strings, the policies also
+apply to pre-mission and post-mission phases without duplicating the policy text
+across individual files.
+
+---
+
 ## 📊 Benchmark Agent UI Modes
 
 You can compare regular, agent-friendly, and agent-hostile UI modes with repeated runs of the same mission. The benchmark runner randomizes mode order by default, executes each condition the requested number of times, parses Testronaut's JSON reports, and writes a CSV, JSON, and Markdown summary.
@@ -163,8 +205,9 @@ For the cleanest comparison, keep the mission file, model, credentials, browser 
 
 ```js
 import { runMissions } from 'testronaut';
+import { applyMissionPolicies } from './policies.js';
 
-export const loginMission = `
+export const loginMission = applyMissionPolicies(`
 Visit ${process.env.URL}.
 Fill in the username field with ${process.env.USERNAME} and password field with ${process.env.PASSWORD}.
 Take a screenshot.
@@ -176,7 +219,7 @@ After clicking "Dock at Mission Control":
   • Consider failure if a visible alert says "incorrect" or "invalid".
 Take a screenshot.
 Report SUCCESS or FAILURE with reasoning.
-`;
+`);
 
 export async function executeMission() {
   return await runMissions({ mission: loginMission }, "login mission");
@@ -189,6 +232,7 @@ export async function executeMission() {
 
 ```
 missions/
+  policies.js
   addTask.mission.js
   completeAllTasks.mission.js
   login.mission.js

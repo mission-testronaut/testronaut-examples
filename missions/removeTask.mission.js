@@ -1,7 +1,8 @@
 import { runMissions } from 'testronaut';
 import { loginMission } from './login.mission.js';
+import { applyMissionPolicies } from './policies.js';
 
-export const removeTaskMission =
+export const removeTaskMission = applyMissionPolicies(
   `Add a throwaway task via #new-task input: "Temp Calibration Task".
    Click the nearby "Add" button.
    Confirm "Temp Calibration Task" appears in the task list.
@@ -10,7 +11,8 @@ export const removeTaskMission =
    Verify the text "Temp Calibration Task" no longer exists in the list.
    Take a screenshot.
    If the task was removed successfully, report SUCCESS.
-   Otherwise, report FAILURE with details.`;
+   Otherwise, report FAILURE with details.`
+);
 
 export async function executeMission() {
   return await runMissions({
