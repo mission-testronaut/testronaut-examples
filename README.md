@@ -11,6 +11,7 @@ Each mission demonstrates how autonomous testing agents can reason, interact, an
 | File | Description |
 |------|--------------|
 | `login.mission.js` | Logs into Mission Control with sample credentials |
+| `autoLoginEmailCode.mission.js` | Sends a login code to a Testronaut inbox, retrieves it automatically, and completes authentication |
 | `addTask.mission.js` | Adds a new task to the mission dashboard |
 | `startTask.mission.js` | Begins a task and waits for it to complete automatically |
 | `removeTask.mission.js` | Removes a completed or queued task |
@@ -48,6 +49,10 @@ export URL="https://demo.testronaut.app"
 export USERNAME="Nova"
 export PASSWORD="1234"
 
+# Optional overrides for the automatic email-code example
+export EMAIL_INBOX_ADDRESS="celestial-nebula-s6vt@inbox.staging.testronaut.app"
+export EMAIL_INBOX_NICKNAME="asimov"
+
 # For OpenAI
 export OPENAI_API_KEY=sk-...
 
@@ -63,6 +68,24 @@ export ANTHROPIC_API_KEY=sk-ant-...
 ```bash
 testronaut login.mission.js
 ```
+
+Authenticate from this project directory first so the session token is written
+to this project's `testronaut-config.json`:
+
+```bash
+testronaut --dev login
+```
+
+Then run the automatic staging email-code example. The `--dev` flag routes both
+authentication and inbox lookup to the staging API:
+
+```bash
+TESTRONAUT_HUMAN_INPUT=false testronaut --dev missions/autoLoginEmailCode.mission.js
+```
+
+This example is intended to be unattended. It reports failure immediately when
+automatic inbox retrieval is unavailable rather than requesting the code from a
+human or trying the TOTP MFA tool.
 
 5. **Run the full suite**
 
