@@ -1,8 +1,10 @@
-# 🧑‍🚀 Testronaut Mission Suite — Crew Simulation
+# 🧑‍🚀 Testronaut Examples — Agentic E2E Testing Missions
 
-This repository contains a collection of **example missions** for [Testronaut](https://testronaut.app), designed to run against the demo sandbox at [https://demo.testronaut.app](https://demo.testronaut.app).
+This is the official example mission collection for [Testronaut](https://testronaut.app), an **agentic end-to-end testing** framework powered by AI agents and Playwright. The examples run against the [Testronaut demo sandbox](https://demo.testronaut.app).
 
-Each mission demonstrates how autonomous testing agents can reason, interact, and validate UI workflows in a real browser.
+Each mission demonstrates how an agentic testing workflow can reason about an interface, interact with a real browser, adapt during a user journey, and validate the result.
+
+**Official Testronaut ecosystem:** [Product](https://testronaut.app) · [Documentation](https://docs.testronaut.app) · [CLI](https://github.com/mission-testronaut/testronaut-cli) · [npm](https://www.npmjs.com/package/testronaut) · [Mission Control](https://mission.testronaut.app)
 
 ---
 
@@ -252,7 +254,7 @@ README.md
 
 ## 🌌 Credits
 
-Built by **Sandevistan Tech Inc.** as part of the [Testronaut](https://testronaut.app) ecosystem, a framework for autonomous QA agents and end‑to‑end testing.
+Built by **Sandevistan Tech Inc.** as part of the [Testronaut](https://testronaut.app) ecosystem, the agentic end-to-end testing framework for plain-English user journeys in real browsers.
 
 ---
 
