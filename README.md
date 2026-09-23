@@ -1,6 +1,6 @@
-# 🧑‍🚀 Testronaut Examples — Agentic E2E Testing Missions
+# 🧑‍🚀 Testronaut™ Examples — Agentic E2E Testing Missions
 
-This is the official example mission collection for [Testronaut](https://testronaut.app), an **agentic end-to-end testing** framework powered by AI agents and Playwright. The examples run against the [Testronaut demo sandbox](https://demo.testronaut.app).
+This is the official example mission collection for [Testronaut™](https://testronaut.app), an **agentic end-to-end testing** framework powered by AI agents and Playwright. The examples run against the [Testronaut demo sandbox](https://demo.testronaut.app).
 
 Each mission demonstrates how an agentic testing workflow can reason about an interface, interact with a real browser, adapt during a user journey, and validate the result.
 
