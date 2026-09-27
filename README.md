@@ -96,6 +96,36 @@ human or trying the TOTP MFA tool.
 testronaut
 ```
 
+### Reuse authentication across mission files
+
+Use `shared-auth` for an ordered suite whose missions use the same account. The
+CLI carries cookies and local storage into each new mission context, while still
+giving every mission an isolated page and browser context:
+
+```bash
+testronaut --session=shared-auth \
+  addTask.mission.js \
+  startTask.mission.js \
+  completeAllTasks.mission.js \
+  removeTask.mission.js
+```
+
+The login prerequisite is wrapped in `launchProtocol()`. The first mission
+executes it normally. Later mission files run its deterministic dashboard probe
+and skip the natural-language login phase when restored authentication is valid.
+Plain `preMission` strings remain supported and always execute normally.
+
+To compare modes with the same ordered mission set:
+
+```bash
+npm run suite:isolated
+npm run suite:shared-auth
+```
+
+Compare the JSON reports' per-step token counts, mission duration, and login/MFA
+tool calls. Do not include `logout.mission.js` until the end of a shared-auth
+suite because it intentionally invalidates the state reused by later missions.
+
 ### TypeScript missions
 
 TypeScript missions use the same `import`/`export` structure as JavaScript missions.

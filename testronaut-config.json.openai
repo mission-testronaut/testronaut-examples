@@ -10,5 +10,9 @@
   "tagMatch": "any",
   "addTags": [],
   "projectName": "testronaut-examples",
-  "maxTurns": 20
+  "maxTurns": 20,
+  "dom": {
+    "listItemLimit": 3,
+    "automaticLimit": 15000
+  }
 }
