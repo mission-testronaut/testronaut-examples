@@ -9,7 +9,8 @@
   "tagMatch": "any",
   "addTags": [],
   "dom": {
-    "listItemLimit": 3
+    "listItemLimit": 3,
+    "automaticLimit": 15000
   },
   "resourceGuard": {
     "enabled": true,
