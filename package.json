@@ -26,6 +26,6 @@
     "@playwright/test": "^1.60.0"
   },
   "dependencies": {
-    "testronaut": "file:../testronaut-cli"
+    "testronaut": "^1.9.3"
   }
 }
