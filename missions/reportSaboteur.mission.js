@@ -1,11 +1,12 @@
 import { runMissions } from 'testronaut';
-import { loginMission } from './login.mission.js';
 import { applyMissionPolicies } from './policies.js';
+import { loginPrerequisite } from './login.mission.js';
 
 export const reportSaboteurMission = applyMissionPolicies(
   `Open the report flow by clicking a button labeled "Report".
    A modal should appear titled "File a Report".
-   In the modal, select any crew member by clicking a radio input next to their name.
+   In the modal, select the first enabled crew member by clicking its parent label once, then verify that label's radio input is checked and Submit Report is enabled.
+   If selection does not persist after one targeted retry on the same label, report FAILURE immediately rather than trying other crew members or selectors.
    Take a screenshot.
    Click the "Submit Report" button.
    After submission:
@@ -18,7 +19,7 @@ export const reportSaboteurMission = applyMissionPolicies(
 
 export async function executeMission() {
   return await runMissions({
-    preMission: [loginMission],
+    preMission: [loginPrerequisite],
     mission: reportSaboteurMission
   }, "report saboteur mission");
 }

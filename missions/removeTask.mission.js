@@ -1,6 +1,6 @@
 import { runMissions } from 'testronaut';
-import { loginMission } from './login.mission.js';
 import { applyMissionPolicies } from './policies.js';
+import { loginPrerequisite } from './login.mission.js';
 
 export const removeTaskMission = applyMissionPolicies(
   `Add a throwaway task via #new-task input: "Temp Calibration Task".
@@ -16,7 +16,7 @@ export const removeTaskMission = applyMissionPolicies(
 
 export async function executeMission() {
   return await runMissions({
-    preMission: [loginMission],
+    preMission: [loginPrerequisite],
     mission: removeTaskMission
   }, "remove task mission");
 }

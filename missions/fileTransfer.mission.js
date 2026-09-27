@@ -1,5 +1,5 @@
 import { runMissions } from 'testronaut';
-import { loginMission } from './login.mission.js';
+import { loginPrerequisite } from './login.mission.js';
 import { logoutMission } from './logout.mission.js';
 import { applyMissionPolicies } from './policies.js';
 
@@ -19,7 +19,7 @@ export const fileTransferMission = applyMissionPolicies(
 
 export async function executeMission() {
   return await runMissions({
-    preMission: [loginMission],
+    preMission: [loginPrerequisite],
     mission: fileTransferMission,
     postMission: logoutMission
   }, "file transfer mission");

@@ -1,6 +1,6 @@
 import { runMissions } from 'testronaut';
-import { loginMission } from './login.mission.js';
 import { applyMissionPolicies } from './policies.js';
+import { loginPrerequisite } from './login.mission.js';
 
 export const addTaskMission = applyMissionPolicies(
   `We are on the dashboard.
@@ -16,7 +16,7 @@ export const addTaskMission = applyMissionPolicies(
 
 export async function executeMission() {
   return await runMissions({
-    preMission: [loginMission],
+    preMission: [loginPrerequisite],
     mission: addTaskMission
   }, "add task mission");
 }

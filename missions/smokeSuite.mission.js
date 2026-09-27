@@ -1,5 +1,5 @@
 import { runMissions } from 'testronaut';
-import { loginMission } from './login.mission.js';
+import { loginPrerequisite } from './login.mission.js';
 import { addTaskMission } from './addTask.mission.js';
 import { startTaskMission } from './startTask.mission.js';
 import { reportSaboteurMission } from './reportSaboteur.mission.js';
@@ -16,7 +16,7 @@ export const smokeSuiteMission = applyMissionPolicies(
 
 export async function executeMission() {
   return await runMissions({
-    preMission: [loginMission, addTaskMission, startTaskMission],
+    preMission: [loginPrerequisite, addTaskMission, startTaskMission],
     mission: reportSaboteurMission,
     tags,
     postMission: logoutMission

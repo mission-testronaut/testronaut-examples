@@ -1,5 +1,5 @@
 import { runMissions } from 'testronaut';
-import { loginMission } from './login.mission.ts';
+import { loginPrerequisite } from './login.mission.ts';
 import { addTaskMission } from './addTask.mission.ts';
 import { applyMissionPolicies } from '../policies.js';
 
@@ -14,7 +14,7 @@ const verifyDashboardMission: string = applyMissionPolicies(
 
 export async function executeMission() {
   return runMissions({
-    preMission: [loginMission, addTaskMission],
+    preMission: [loginPrerequisite, addTaskMission],
     mission: verifyDashboardMission,
     tags,
   }, 'TypeScript smoke suite');

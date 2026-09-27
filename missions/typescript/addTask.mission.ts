@@ -1,6 +1,6 @@
 import { runMissions } from 'testronaut';
-import { loginMission } from './login.mission.ts';
 import { applyMissionPolicies } from '../policies.js';
+import { loginPrerequisite } from './login.mission.ts';
 
 export const tags: string[] = ['tasks', 'typescript'];
 
@@ -18,7 +18,7 @@ export const addTaskMission: string = applyMissionPolicies(
 
 export async function executeMission() {
   return runMissions({
-    preMission: loginMission,
+    preMission: loginPrerequisite,
     mission: addTaskMission,
     tags,
   }, 'TypeScript add task mission');
