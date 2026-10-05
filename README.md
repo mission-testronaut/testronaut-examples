@@ -1,14 +1,46 @@
-# 🧑‍🚀 Testronaut™ Examples — Agentic E2E Testing Missions
+# 🧑‍🚀 Testronaut™ Mission Handbook
+
+![Astronaut crew planning a mission at launch control](assets/mission-handbook.png)
 
 This is the official example mission collection for [Testronaut™](https://testronaut.app), an **agentic end-to-end testing** framework powered by AI agents and Playwright. The examples run against the [Testronaut demo sandbox](https://demo.testronaut.app).
 
-Each mission demonstrates how an agentic testing workflow can reason about an interface, interact with a real browser, adapt during a user journey, and validate the result.
+This repository is the flight manual for the public **Crew Simulator** at
+[`demo.testronaut.app`](https://demo.testronaut.app). Each mission demonstrates
+how an agentic test reasons about an interface, uses a real browser, adapts during
+a user journey, and returns an inspectable result.
 
 **Official Testronaut ecosystem:** [Product](https://testronaut.app) · [Documentation](https://docs.testronaut.app) · [CLI](https://github.com/mission-testronaut/testronaut-cli) · [npm](https://www.npmjs.com/package/testronaut) · [Mission Control](https://mission.testronaut.app)
 
+> **The demo is a test target, not the Testronaut product.** Run these missions
+> with the Testronaut CLI, then inspect their reports locally or in Mission
+> Control.
+
 ---
 
-## 🧩 Overview
+## 🛰️ Launchpad
+
+```bash
+git clone https://github.com/mission-testronaut/testronaut-examples.git
+cd testronaut-examples
+cp .env.example .env
+npm install
+npx testronaut login.mission.js
+```
+
+Add an API key for your preferred provider to `.env` before launch. The demo
+credentials in `.env.example` are intentionally public and work only against the
+Crew Simulator.
+
+| Flight level | Start here | What it demonstrates |
+|---|---|---|
+| **Cadet** | `login.mission.js` | A focused login journey and clear success criteria |
+| **Pilot** | `addTask.mission.js` | Auth setup, dashboard interaction, and report evidence |
+| **Commander** | `smokeSuite.mission.js` | A composed journey with pre- and post-mission phases |
+| **Flight lab** | `scripts/benchmark-agent-modes.mjs` | Repeatable UI-mode comparisons and metrics |
+
+---
+
+## 🧭 Mission catalog
 
 | File | Description |
 |------|--------------|
@@ -46,6 +78,12 @@ cd testronaut-examples
 ```
 
 3. **Set your environment variables** (used by missions)
+
+Copy the included template for a ready-to-edit local setup:
+
+```bash
+cp .env.example .env
+```
 
 ```bash
 export URL="https://demo.testronaut.app"
