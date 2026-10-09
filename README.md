@@ -110,6 +110,15 @@ export ANTHROPIC_API_KEY=sk-ant-...
 testronaut login.mission.js
 ```
 
+Optionally run the same mission with Jev evidence and completion guardrails. Guardrails use your own Jev key, retain the configured execution model, and fail open if Jev is unavailable:
+
+```bash
+export TESTRONAUT_JEV_API_KEY="your-key"
+testronaut --guardrails login.mission.js
+```
+
+The example config keeps guardrails disabled by default. Set `guardrails.enabled` to `true` for project-wide opt-in, or use `--guardrails=shadow` to collect telemetry without allowing early completion.
+
 Authenticate from this project directory first so the session token is written
 to this project's `testronaut-config.json`:
 
