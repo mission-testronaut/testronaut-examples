@@ -31,6 +31,11 @@
     "enabled": true,
     "timeoutSeconds": 60
   },
+  "guardrails": {
+    "enabled": false,
+    "mode": "live",
+    "completionProbability": 0.8
+  },
   "rateLimits": {
     "tier": "unknown",
     "region": "global",
