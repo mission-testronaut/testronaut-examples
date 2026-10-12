@@ -19,6 +19,9 @@ a user journey, and returns an inspectable result.
 
 ## 🛰️ Launchpad
 
+These examples require **Node.js 20 or newer**. Node.js 22 LTS is recommended;
+run `nvm use` if you use NVM.
+
 ```bash
 git clone https://github.com/mission-testronaut/testronaut-examples.git
 cd testronaut-examples
