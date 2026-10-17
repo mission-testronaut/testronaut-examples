@@ -50,6 +50,7 @@ Crew Simulator.
 | `login.mission.js` | Logs into Mission Control with sample credentials |
 | `autoLoginEmailCode.mission.js` | Sends a login code to a Testronaut inbox, retrieves it automatically, and completes authentication |
 | `addTask.mission.js` | Adds a new task to the mission dashboard |
+| `recoveryDemo.example.js` | Deliberately records and exercises one reload recovery so the amber status can be inspected |
 | `startTask.mission.js` | Begins a task and waits for it to complete automatically |
 | `removeTask.mission.js` | Removes a completed or queued task |
 | `reportSaboteur.mission.js` | Files a report to identify the Saboteur |
@@ -57,7 +58,7 @@ Crew Simulator.
 | `fileTransfer.mission.js` | Downloads the sus briefing file and uploads a crewmate alibi log |
 | `logout.mission.js` | Logs the user out and returns to the login screen |
 | `smokeSuite.mission.js` | Runs a full workflow suite (login → task → report → logout) |
-| `policies.js` | Applies shared screenshot and post-run feedback policies to every mission |
+| `policies.js` | Applies shared screenshot, recovery, and post-run feedback policies to every mission |
 | `typescript/login.mission.ts` | TypeScript equivalent of the login mission |
 | `typescript/addTask.mission.ts` | TypeScript mission with a relative `.ts` import |
 | `typescript/smokeSuite.mission.ts` | Composes multiple typed mission goals |
@@ -231,6 +232,18 @@ should be versioned and measured before they are retained.
 Because composed suites reuse the exported mission strings, the policies also
 apply to pre-mission and post-mission phases without duplicating the policy text
 across individual files.
+
+### Inspect a recovered mission
+
+The project-level `recovery` configuration permits one reload or unexpected-dialog dismissal while keeping recovered missions green for the default exit code. The shared policy requires the agent to record the reason and forbids using recovery to weaken an assertion.
+
+Run the opt-in instrumentation example to generate a predictable amber result without adding it to normal mission discovery:
+
+```bash
+npx testronaut missions/recoveryDemo.example.js
+```
+
+Its main phase deliberately invalidates the current client view, records a reload recovery with screenshot evidence, reloads once, and verifies authentication afterward. The resulting schema-v3 report contains one passed setup phase and one recovered main phase. Use `--strict-recovery` to confirm the same report produces a nonzero CI outcome.
 
 ---
 

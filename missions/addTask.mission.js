@@ -9,6 +9,7 @@ export const addTaskMission = applyMissionPolicies(
    Take a screenshot.
    Click the "Add" button near the input to submit.
    Then verify the task list (the <ul> of tasks) contains text "Check reactor coils".
+   If the task is still missing after two checks, record a "reload" recovery, reload once, and check again.
    Take a screenshot.
    If the task appears in the list, report SUCCESS explaining how it was verified.
    Otherwise, report FAILURE with the reason.`
@@ -17,6 +18,9 @@ export const addTaskMission = applyMissionPolicies(
 export async function executeMission() {
   return await runMissions({
     preMission: [loginPrerequisite],
-    mission: addTaskMission
+    mission: addTaskMission,
+    recovery: {
+      permitted: ['reload']
+    }
   }, "add task mission");
 }

@@ -27,7 +27,16 @@ Reporting rules:
 - Never weaken an assertion or change a mission automatically. Recommendations require review and measurement.
 `;
 
-export const globalMissionPolicy = `${screenshotPolicy}\n${missionFeedbackPolicy}`;
+export const recoveryPolicy = `
+RECOVERY POLICY
+- A recovery is an action outside the ordinary user journey that is needed to continue after an unexpected state, such as reloading a stale page or dismissing an unexpected dialog.
+- Before taking a permitted recovery, call record_recovery with a stable action name and the observed reason. Request a screenshot when it helps prove the unexpected state.
+- The project permits only the recovery actions listed in testronaut-config.json. Do not invent another workaround.
+- Try a recovery at most once for the same unexpected state. If it does not work, report FAILURE.
+- Do not record ordinary navigation, expected dialog dismissal, selector refinement, or normal verification as recovery.
+`;
+
+export const globalMissionPolicy = `${screenshotPolicy}\n${recoveryPolicy}\n${missionFeedbackPolicy}`;
 
 export function applyMissionPolicies(mission) {
   return `${mission.trim()}\n\n${globalMissionPolicy.trim()}`;

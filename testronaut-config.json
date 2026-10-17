@@ -31,6 +31,13 @@
     "enabled": true,
     "timeoutSeconds": 60
   },
+  "recovery": {
+    "permitted": [
+      "reload",
+      "dismiss_dialog"
+    ],
+    "failBuild": false
+  },
   "guardrails": {
     "enabled": false,
     "mode": "live",
