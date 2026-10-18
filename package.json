@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "testronaut",
+    "mission:keyboard": "testronaut missions/keyboardControls.mission.js",
     "suite:isolated": "testronaut addTask.mission.js startTask.mission.js completeAllTasks.mission.js removeTask.mission.js",
     "suite:shared-auth": "testronaut --session=shared-auth addTask.mission.js startTask.mission.js completeAllTasks.mission.js removeTask.mission.js",
     "benchmark:agent-modes": "node scripts/benchmark-agent-modes.mjs"
