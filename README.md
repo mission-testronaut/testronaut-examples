@@ -344,6 +344,53 @@ missions/
 README.md
 ```
 
+## Use Testronaut as a local MCP server
+
+This repository includes a small stdio MCP wrapper. It exposes eight tools:
+
+- `list_missions` discovers existing mission files.
+- `create_mission` writes a structured, no-overwrite mission artifact.
+- `validate_mission` resolves a mission plan without launching a browser.
+- `create_suite` writes an ordered suite manifest under `missions/suites/`.
+- `update_suite` adds or removes validated missions from a saved suite.
+- `run_mission` runs one mission or performs a dry run.
+- `run_suite` runs an inline mission set or saved suite with isolated or shared authentication.
+- `get_latest_report` returns a compact result and paths to the full reports.
+
+Install dependencies and verify the wrapper:
+
+```bash
+node --version # must be 20.17 or newer
+npm install
+npm run mcp:test
+```
+
+Register it with Codex using an absolute path:
+
+```bash
+codex mcp add testronaut -- node /absolute/path/to/testronaut-examples/mcp/start.mjs
+codex mcp list
+```
+
+Then try requests such as:
+
+```text
+Use Testronaut to list the missions in this project.
+Dry-run the login mission and explain the resolved plan.
+Run addTask and startTask as a shared-auth suite, then summarize the report.
+Create a route-persistence mission, validate it, and add it to a navigation-regression suite.
+```
+
+Authoring tools accept structured objectives, steps, success criteria, and tags;
+they do not accept arbitrary JavaScript. Mission creation refuses to overwrite an
+existing file. Suite manifests are JSON files intended to be reviewed and
+committed alongside the missions they reference.
+
+The wrapper disables interactive human-input prompts because standard input is
+reserved for the MCP protocol. Missions needing MFA should use Testronaut's
+automatic email-code or TOTP capabilities. A normal run launches a browser and
+may modify the configured test application; use `dryRun: true` while exploring.
+
 ---
 
 ## 🌌 Credits

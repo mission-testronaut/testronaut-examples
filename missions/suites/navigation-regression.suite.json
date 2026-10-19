@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "name": "navigation-regression",
+  "description": "Shared-auth regression coverage for iframe ship navigation and locked-route persistence.",
+  "session": "shared-auth",
+  "missions": [
+    "missions/shipMapIframe.mission.js",
+    "missions/route-persistence.mission.js"
+  ],
+  "createdAt": "2026-10-19T05:19:06.158Z",
+  "updatedAt": "2026-10-19T05:19:06.158Z"
+}

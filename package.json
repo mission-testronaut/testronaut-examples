@@ -4,10 +4,12 @@
   "description": "a set of example missions for testing demo.testronaut.app",
   "main": "index.js",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.17"
   },
   "scripts": {
     "test": "testronaut",
+    "mcp:start": "node mcp/start.mjs",
+    "mcp:test": "node --test mcp/server.test.mjs",
     "mission:keyboard": "testronaut missions/keyboardControls.mission.js",
     "suite:isolated": "testronaut addTask.mission.js startTask.mission.js completeAllTasks.mission.js removeTask.mission.js",
     "suite:shared-auth": "testronaut --session=shared-auth addTask.mission.js startTask.mission.js completeAllTasks.mission.js removeTask.mission.js",
@@ -32,6 +34,8 @@
     "@playwright/test": "1.63.0"
   },
   "dependencies": {
-    "testronaut": "^1.9.3"
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "testronaut": "^2.1.3",
+    "zod": "^4.6.7"
   }
 }
