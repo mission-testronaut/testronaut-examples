@@ -344,9 +344,11 @@ missions/
 README.md
 ```
 
-## Use Testronaut as a local MCP server
+## Use Testronaut as a local MCP server (Beta)
 
-This repository includes a small stdio MCP wrapper. It exposes eight tools:
+> **Beta:** The MCP integration is experimental. Its tools and response fields may change before a stable release.
+
+This repository includes a small beta stdio MCP wrapper. It exposes eight tools:
 
 - `list_missions` discovers existing mission files.
 - `create_mission` writes a structured, no-overwrite mission artifact.
@@ -354,8 +356,8 @@ This repository includes a small stdio MCP wrapper. It exposes eight tools:
 - `create_suite` writes an ordered suite manifest under `missions/suites/`.
 - `update_suite` adds or removes validated missions from a saved suite.
 - `run_mission` runs one mission or performs a dry run.
-- `run_suite` runs an inline mission set or saved suite with isolated or shared authentication.
-- `get_latest_report` returns a compact result and paths to the full reports.
+- `run_suite` runs an inline mission set or saved suite with isolated or shared authentication. Its response includes `requestedMissions` and `missingMissions`, and an omitted mission makes the tool call fail even if the CLI's partial summary contains only passes.
+- `get_latest_report` returns a compact result and paths to the full reports. Pass a `runId` to retrieve the report for a specific run; omit it to retrieve the newest report.
 
 Install dependencies and verify the wrapper:
 
@@ -390,6 +392,12 @@ The wrapper disables interactive human-input prompts because standard input is
 reserved for the MCP protocol. Missions needing MFA should use Testronaut's
 automatic email-code or TOTP capabilities. A normal run launches a browser and
 may modify the configured test application; use `dryRun: true` while exploring.
+
+Only one suite can run through this MCP server at a time. Suite timeouts stop
+the complete spawned process group before another run is accepted, avoiding
+overlapping browsers and shared-session state. Nonzero CLI runs preserve stderr
+in the tool response. Always use the returned `runId` when requesting the
+matching report; “latest” can change when another process writes a report.
 
 ---
 

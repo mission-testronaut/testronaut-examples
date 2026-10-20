@@ -14,6 +14,8 @@ const SUITES_ROOT = path.join(MISSIONS_ROOT, 'suites');
 const CONFIG_PATH = path.join(PROJECT_ROOT, 'testronaut-config.json');
 const CLI_PATH = path.join(PROJECT_ROOT, 'node_modules', 'testronaut', 'bin', 'cli.js');
 const MAX_OUTPUT_BYTES = 20 * 1024 * 1024;
+const TERMINATION_GRACE_MS = 5000;
+let activeSuiteRun = false;
 
 async function loadConfig() {
   try {
@@ -196,24 +198,45 @@ export function runCli(args, { timeoutSeconds = 600 } = {}) {
       cwd: PROJECT_ROOT,
       env: { ...process.env, TESTRONAUT_HUMAN_INPUT: 'false' },
       stdio: ['ignore', 'pipe', 'pipe'],
+      detached: process.platform !== 'win32',
     });
 
     let stdout = '';
     let stderr = '';
     let outputBytes = 0;
     let settled = false;
+    let terminationError;
+    let forceKillTimer;
+
+    const killProcessGroup = signal => {
+      if (!child.pid) return;
+      try {
+        if (process.platform === 'win32') child.kill(signal);
+        else process.kill(-child.pid, signal);
+      } catch (error) {
+        if (error?.code !== 'ESRCH') throw error;
+      }
+    };
+
+    const terminate = error => {
+      if (terminationError) return;
+      terminationError = error;
+      killProcessGroup('SIGTERM');
+      forceKillTimer = setTimeout(() => killProcessGroup('SIGKILL'), TERMINATION_GRACE_MS);
+      forceKillTimer.unref?.();
+    };
 
     const finish = callback => {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
+      clearTimeout(forceKillTimer);
       callback();
     };
     const collect = target => chunk => {
       outputBytes += chunk.length;
       if (outputBytes > MAX_OUTPUT_BYTES) {
-        child.kill('SIGTERM');
-        finish(() => reject(new Error('Testronaut output exceeded the 20 MB safety limit.')));
+        terminate(new Error('Testronaut output exceeded the 20 MB safety limit.'));
         return;
       }
       if (target === 'stdout') stdout += chunk;
@@ -226,6 +249,10 @@ export function runCli(args, { timeoutSeconds = 600 } = {}) {
     child.stderr.on('data', collect('stderr'));
     child.on('error', error => finish(() => reject(error)));
     child.on('close', (exitCode, signal) => finish(() => {
+      if (terminationError) {
+        reject(terminationError);
+        return;
+      }
       try {
         resolve({ exitCode, signal, result: parseJsonOutput(stdout, stderr), stderr: stderr.trim() || undefined });
       } catch (error) {
@@ -234,10 +261,33 @@ export function runCli(args, { timeoutSeconds = 600 } = {}) {
     }));
 
     const timer = setTimeout(() => {
-      child.kill('SIGTERM');
-      finish(() => reject(new Error(`Testronaut timed out after ${timeoutSeconds} seconds.`)));
+      terminate(new Error(`Testronaut timed out after ${timeoutSeconds} seconds and was terminated.`));
     }, timeoutSeconds * 1000);
   });
+}
+
+export async function withSuiteRunLock(callback) {
+  if (activeSuiteRun) {
+    throw new Error('Another Testronaut suite is already running. Wait for it to finish before starting a new browser run.');
+  }
+  activeSuiteRun = true;
+  try {
+    return await callback();
+  } finally {
+    activeSuiteRun = false;
+  }
+}
+
+export function reconcileSuiteRun(run, requestedMissions) {
+  const reportedFiles = new Set((run.result?.missions || []).map(mission => mission.file));
+  const missingMissions = requestedMissions.filter(mission => !reportedFiles.has(mission));
+  return {
+    ...run.result,
+    exitCode: run.exitCode,
+    ...(run.stderr ? { stderr: run.stderr } : {}),
+    requestedMissions,
+    missingMissions,
+  };
 }
 
 async function reportDirectory() {
@@ -245,8 +295,11 @@ async function reportDirectory() {
   return path.resolve(PROJECT_ROOT, config.outputDir || 'missions/mission_reports');
 }
 
-export async function latestReport() {
-  const directory = await reportDirectory();
+export async function latestReport(runId, { reportsRoot } = {}) {
+  if (runId !== undefined && !/^run_\d+$/.test(runId)) {
+    throw new Error('Report runId must match run_<digits>.');
+  }
+  const directory = reportsRoot || await reportDirectory();
   const entries = await fs.readdir(directory, { withFileTypes: true }).catch(error => {
     if (error?.code === 'ENOENT') return [];
     throw error;
@@ -256,8 +309,9 @@ export async function latestReport() {
     .map(entry => entry.name)
     .sort((a, b) => Number(b.slice(4, -5)) - Number(a.slice(4, -5)));
 
-  if (!reports.length) return null;
-  const jsonPath = path.join(directory, reports[0]);
+  const reportFile = runId ? `${runId}.json` : reports[0];
+  if (!reportFile || !reports.includes(reportFile)) return null;
+  const jsonPath = path.join(directory, reportFile);
   const report = JSON.parse(await fs.readFile(jsonPath, 'utf8'));
   return {
     runId: report.runId,
@@ -286,8 +340,8 @@ function toolResult(value, isError = false) {
 
 export function createServer() {
   const server = new McpServer(
-    { name: '🧑‍🚀 Testronaut', version: '0.1.0' },
-    { instructions: 'Use list_missions before selecting tests. Use dryRun when checking a plan. Mission runs operate a real browser and may change the configured test application.' },
+    { name: '🧑‍🚀 Testronaut MCP (Beta)', version: '0.1.0' },
+    { instructions: 'This MCP integration is beta. Use list_missions before selecting tests. Use dryRun when checking a plan. Mission runs operate a real browser and may change the configured test application.' },
   );
 
   server.registerTool('list_missions', {
@@ -375,7 +429,14 @@ export function createServer() {
     if (dryRun) args.push('--dry-run');
     if (!screenshots) args.push('--no-screenshots');
     const run = await runCli(args, { timeoutSeconds });
-    return toolResult({ ...run.result, exitCode: run.exitCode }, run.exitCode !== 0);
+    const report = run.result?.runId ? await latestReport(run.result.runId) : null;
+    const value = {
+      ...run.result,
+      exitCode: run.exitCode,
+      ...(run.stderr ? { stderr: run.stderr } : {}),
+      ...(report ? { report } : {}),
+    };
+    return toolResult(value, run.exitCode !== 0);
   });
 
   server.registerTool('run_suite', {
@@ -405,16 +466,23 @@ export function createServer() {
     const args = [`--session=${selectedSession}`, ...safeMissions];
     if (dryRun) args.push('--dry-run');
     if (!screenshots) args.push('--no-screenshots');
-    const run = await runCli(args, { timeoutSeconds });
-    return toolResult({ ...run.result, exitCode: run.exitCode }, run.exitCode !== 0);
+    const run = await withSuiteRunLock(() => runCli(args, { timeoutSeconds }));
+    const value = reconcileSuiteRun(run, safeMissions);
+    const report = run.result?.runId ? await latestReport(run.result.runId) : null;
+    if (report) value.report = report;
+    return toolResult(value, run.exitCode !== 0 || value.missingMissions.length > 0);
   });
 
   server.registerTool('get_latest_report', {
     title: '🧑‍🚀 Get latest Testronaut report',
-    description: 'Return a compact summary and local paths for the most recent Testronaut JSON and HTML reports.',
-    inputSchema: {},
+    description: 'Return a compact summary and local paths for a specific Testronaut run, or the most recent report when runId is omitted.',
+    inputSchema: {
+      runId: z.string().regex(/^run_\d+$/).optional().describe('Exact run ID returned by a mission or suite run.'),
+    },
     annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
-  }, async () => toolResult((await latestReport()) || { message: 'No Testronaut reports were found.' }));
+  }, async ({ runId }) => toolResult((await latestReport(runId)) || {
+    message: runId ? `No Testronaut report was found for ${runId}.` : 'No Testronaut reports were found.',
+  }));
 
   return server;
 }

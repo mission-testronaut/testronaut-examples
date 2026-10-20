@@ -10,9 +10,11 @@ import {
   createServer,
   createSuiteArtifact,
   latestReport,
+  reconcileSuiteRun,
   renderMission,
   resolveMission,
   updateSuiteArtifact,
+  withSuiteRunLock,
 } from './server.mjs';
 
 test('mission paths are restricted to the missions directory', async () => {
@@ -28,6 +30,50 @@ test('latestReport returns a compact report when reports exist', async () => {
     assert.ok(Array.isArray(report.missions));
     assert.equal('steps' in (report.missions[0] || {}), false);
   }
+});
+
+test('latestReport selects an exact run ID', async () => {
+  const reportsRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'testronaut-reports-'));
+  try {
+    const makeReport = runId => JSON.stringify({
+      runId,
+      summary: { totalMissions: 0, passed: 0, recovered: 0, failed: 0 },
+      missions: [],
+    });
+    await fs.writeFile(path.join(reportsRoot, 'run_100.json'), makeReport('run_100'));
+    await fs.writeFile(path.join(reportsRoot, 'run_200.json'), makeReport('run_200'));
+    assert.equal((await latestReport('run_100', { reportsRoot })).runId, 'run_100');
+    assert.equal(await latestReport('run_300', { reportsRoot }), null);
+    await assert.rejects(latestReport('../run_100', { reportsRoot }), /runId/);
+  } finally {
+    await fs.rm(reportsRoot, { recursive: true, force: true });
+  }
+});
+
+test('suite reconciliation exposes stderr and omitted missions', () => {
+  const value = reconcileSuiteRun({
+    exitCode: 1,
+    stderr: 'Error running mission: missions/shipMapIframe.mission.js',
+    result: {
+      runId: 'run_123',
+      missions: [{ file: 'missions/route-persistence.mission.js', status: 'passed' }],
+    },
+  }, [
+    'missions/shipMapIframe.mission.js',
+    'missions/route-persistence.mission.js',
+  ]);
+  assert.equal(value.exitCode, 1);
+  assert.match(value.stderr, /shipMapIframe/);
+  assert.deepEqual(value.missingMissions, ['missions/shipMapIframe.mission.js']);
+});
+
+test('suite lock rejects overlapping runs and releases after completion', async () => {
+  let release;
+  const first = withSuiteRunLock(() => new Promise(resolve => { release = resolve; }));
+  await assert.rejects(withSuiteRunLock(async () => {}), /already running/);
+  release('done');
+  assert.equal(await first, 'done');
+  assert.equal(await withSuiteRunLock(async () => 'next'), 'next');
 });
 
 test('mission authoring renders structured input without executable interpolation', async () => {
