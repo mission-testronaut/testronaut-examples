@@ -57,6 +57,7 @@ Crew Simulator.
 | `completeAllTasks.mission.js` | Completes every task sequentially |
 | `fileTransfer.mission.js` | Downloads the sus briefing file and uploads a crewmate alibi log |
 | `shipMapIframe.mission.js` | Discovers themed rooms and plots a hallway route using controls and text inside a same-origin iframe |
+| `javascriptDialogs.mission.js` | Handles alert, confirm, prompt, and beforeunload dialogs with explicit one-shot responses |
 | `logout.mission.js` | Logs the user out and returns to the login screen |
 | `smokeSuite.mission.js` | Runs a full workflow suite (login → task → report → logout) |
 | `policies.js` | Applies shared screenshot, recovery, and post-run feedback policies to every mission |
